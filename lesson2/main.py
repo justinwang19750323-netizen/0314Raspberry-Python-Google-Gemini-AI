@@ -7,6 +7,6 @@ load_dotenv()
 client = genai.Client()
 
 response = client.models.generate_content(
-    model="gemini-3-flash-preview", contents="為何有石英?"
+    model="gemini-3-flash-preview", contents="為何有地震?"
 )
 print(response.text)
