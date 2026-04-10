@@ -38,30 +38,33 @@ class Filter:
         pass
 
     def inlet(self, body: dict, __user__: Optional[dict] = None) -> dict:
-        # Modify the request body or validate it before processing by the chat completion API.
-        # This function is the pre-processor for the API where various checks on the input can be performed.
-        # It can also modify the request before sending it to the API.
-        print(f"inlet:{__name__}")
-        print(f"inlet:body:{body}")
-        print(f"inlet:user:{__user__}")
-
-        if __user__.get("role", "admin") in ["user", "admin"]:
-            messages = body.get("messages", [])
-
-            max_turns = min(__user__["valves"].max_turns, self.valves.max_turns)
-            if len(messages) > max_turns:
-                raise Exception(
-                    f"Conversation turn limit exceeded. Max turns: {max_turns}"
-                )
-
+        # print("使用者輸入的內容:")
+        # print(body.get("messages", [])[-1].get("content", "") if body.get("messages") else "")
         return body
 
     def outlet(self, body: dict, __user__: Optional[dict] = None) -> dict:
-        # Modify or analyze the response body after processing by the API.
-        # This function is the post-processor for the API, which can be used to modify the response
-        # or perform additional checks and analytics.
-        print(f"outlet:{__name__}")
-        print(f"outlet:body:{body}")
-        print(f"outlet:user:{__user__}")
+        # 取得使用者最後輸入的內容
+        messages = body.get("messages", [])
+        user_input = ""
+        assistant_output = ""
+
+        # for msg in reversed(messages):
+        #     if msg.get("role") == "assistant" and not assistant_output:
+        #         assistant_output = msg.get("content", "")
+        #     elif msg.get("role") == "user" and not user_input:
+        #         user_input = msg.get("content", "")
+        #     if user_input and assistant_output:
+        #         break
+
+        # print("使用者最後輸入:", user_input)
+
+        # # 永遠將輸出覆蓋為 Hello! World!
+        # for msg in messages:
+        #     if msg.get("role") == "assistant":
+        #         msg["content"] = "Hello! 徐國堂!💕"
+
+        for msg in messages:
+            if msg.get("role") == "assistant":
+                msg["content"] = msg.get("content", "") + "\n\n天天開心"
 
         return body
